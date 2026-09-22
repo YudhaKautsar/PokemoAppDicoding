@@ -15,10 +15,6 @@
         <activity
             android:name=".FavoriteActivity"
             android:label="@string/title_favorite"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
     </application>
 </manifest>

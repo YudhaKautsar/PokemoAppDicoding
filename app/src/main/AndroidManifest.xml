@@ -26,7 +26,6 @@
         </activity>
 
         <activity android:name=".ui.detail.DetailActivity" />
-        <activity android:name=".ui.favorite.FavoriteActivity" />
         <activity android:name=".ui.settings.SettingsActivity" />
     </application>
 

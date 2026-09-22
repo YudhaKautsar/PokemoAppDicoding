@@ -3,6 +3,10 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
     namespace = "com.yudha.pokemoapp"
     compileSdk = 35
@@ -21,17 +25,13 @@ android {
 
     buildTypes {
         release {
-            optimization {
-                enable = false
-            }
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin {
-        jvmToolchain(17)
     }
     buildFeatures {
         viewBinding = true

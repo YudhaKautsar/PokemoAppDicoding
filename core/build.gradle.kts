@@ -3,6 +3,10 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
     namespace = "com.yudha.pokemoapp.core"
     compileSdk = 35
@@ -24,9 +28,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin {
-        jvmToolchain(17)
     }
     buildFeatures {
         viewBinding = true
