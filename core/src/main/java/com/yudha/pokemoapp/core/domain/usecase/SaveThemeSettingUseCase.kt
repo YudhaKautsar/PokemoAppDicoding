@@ -1,9 +1,9 @@
 package com.yudha.pokemoapp.core.domain.usecase
 
-import com.yudha.pokemoapp.core.data.preferences.SettingPreferences
+import com.yudha.pokemoapp.core.domain.repository.ISettingRepository
 
-class SaveThemeSettingUseCase(private val preferences: SettingPreferences) {
+class SaveThemeSettingUseCase(private val repository: ISettingRepository) {
     suspend operator fun invoke(isDarkModeActive: Boolean) {
-        preferences.saveThemeSetting(isDarkModeActive)
+        repository.saveThemeSetting(isDarkModeActive)
     }
 }

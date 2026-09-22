@@ -6,6 +6,7 @@ import com.yudha.pokemoapp.core.data.local.database.AppDatabase
 import com.yudha.pokemoapp.core.data.preferences.SettingPreferences
 import com.yudha.pokemoapp.core.data.remote.ApiService
 import com.yudha.pokemoapp.core.data.repository.PokemonRepositoryImpl
+import com.yudha.pokemoapp.core.domain.repository.ISettingRepository
 import com.yudha.pokemoapp.core.domain.repository.PokemonRepository
 import com.yudha.pokemoapp.core.domain.usecase.GetFavoritePokemonUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetFavoriteStatusUseCase
@@ -53,7 +54,7 @@ val databaseModule = module {
         ).build()
     }
     single { get<AppDatabase>().pokemonDao() }
-    single { SettingPreferences(androidApplication()) }
+    single<ISettingRepository> { SettingPreferences(androidApplication()) }
 }
 
 val repositoryModule = module {
