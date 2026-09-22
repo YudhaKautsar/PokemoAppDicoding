@@ -11,4 +11,13 @@
     <string name="error_unknown">Unknown Error</string>
     <string name="title_favorite">Favorite Pokemon</string>
     <string name="settings_title">Settings</string>
+    <string name="theme_settings_title">Theme Settings</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="sort_by">Sort By</string>
+    <string name="sort_name">Name</string>
+    <string name="sort_id">ID</string>
+    <string name="order">Order</string>
+    <string name="order_ascending">Ascending</string>
+    <string name="order_descending">Descending</string>
+    <string name="detail_title">Pokemon Detail</string>
 </resources>

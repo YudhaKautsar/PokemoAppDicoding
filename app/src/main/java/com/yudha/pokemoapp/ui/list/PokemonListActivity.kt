@@ -36,7 +36,7 @@ class PokemonListActivity : BaseActivity<ActivityPokemonListBinding>(ActivityPok
             try {
                 val intent = Intent(this, Class.forName("com.yudha.pokemoapp.favorite.FavoriteActivity"))
                 startActivity(intent)
-            } catch (e: ClassNotFoundException) {
+            } catch (_: ClassNotFoundException) {
                 Toast.makeText(this, "Favorite feature not available", Toast.LENGTH_SHORT).show()
             }
         }

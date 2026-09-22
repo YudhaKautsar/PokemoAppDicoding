@@ -13,11 +13,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val getThemeSettingUseCase: GetThemeSettingUseCase,
+    getThemeSettingUseCase: GetThemeSettingUseCase,
     private val saveThemeSettingUseCase: SaveThemeSettingUseCase,
-    private val getSortSettingUseCase: GetSortSettingUseCase,
+    getSortSettingUseCase: GetSortSettingUseCase,
     private val saveSortSettingUseCase: SaveSortSettingUseCase,
-    private val getSortOrderUseCase: GetSortOrderUseCase,
+    getSortOrderUseCase: GetSortOrderUseCase,
     private val saveSortOrderUseCase: SaveSortOrderUseCase
 ) : ViewModel() {
 
