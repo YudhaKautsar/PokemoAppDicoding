@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.yudha.pokemoapp.core.domain.model.Pokemon
 import com.yudha.pokemoapp.core.domain.model.resource.Resource
 import com.yudha.pokemoapp.core.domain.usecase.GetPokemonListUseCase
+import com.yudha.pokemoapp.core.domain.usecase.GetSortOrderUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetSortSettingUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,25 +17,33 @@ import kotlinx.coroutines.flow.stateIn
 
 class PokemonListViewModel(
     private val getPokemonListUseCase: GetPokemonListUseCase,
-    getSortSettingUseCase: GetSortSettingUseCase
+    getSortSettingUseCase: GetSortSettingUseCase,
+    getSortOrderUseCase: GetSortOrderUseCase
 ) : ViewModel() {
 
     private val _pokemonList = MutableStateFlow<List<Pokemon>>(emptyList())
     
     private val _searchQuery = MutableStateFlow("")
 
-    val pokemonList: StateFlow<List<Pokemon>> = combine(_pokemonList, _searchQuery, getSortSettingUseCase()) { list, query, sort ->
+    val pokemonList: StateFlow<List<Pokemon>> = combine(
+        _pokemonList, 
+        _searchQuery, 
+        getSortSettingUseCase(), 
+        getSortOrderUseCase()
+    ) { list, query, sort, isAscending ->
         val filteredList = if (query.isBlank()) {
             list
         } else {
             list.filter { it.name.contains(query, ignoreCase = true) }
         }
         
-        when (sort) {
+        val sortedList = when (sort) {
             "name" -> filteredList.sortedBy { it.name }
             "id" -> filteredList.sortedBy { it.id.toIntOrNull() ?: 0 }
             else -> filteredList
         }
+
+        if (isAscending) sortedList else sortedList.reversed()
     }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     private val _isLoading = MutableStateFlow(false)

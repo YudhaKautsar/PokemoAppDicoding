@@ -52,9 +52,16 @@ class PokemonRepositoryImpl(
         }
     }
 
-    override fun getFavoritePokemon(): Flow<List<Pokemon>> {
-        return pokemonDao.getAllFavorites().map { entities ->
-            entities.map { PokemonMapper.mapEntityToDomain(it) }
+    override fun getFavoritePokemon(): Flow<Resource<List<Pokemon>>> = flow {
+        emit(Resource.Loading())
+        try {
+            pokemonDao.getAllFavorites().map { entities ->
+                entities.map { PokemonMapper.mapEntityToDomain(it) }
+            }.collect { list ->
+                emit(Resource.Success(list))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Unknown Error"))
         }
     }
 

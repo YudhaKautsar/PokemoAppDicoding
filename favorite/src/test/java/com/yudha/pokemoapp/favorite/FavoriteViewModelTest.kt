@@ -1,6 +1,7 @@
 package com.yudha.pokemoapp.favorite
 
 import com.yudha.pokemoapp.core.domain.model.Pokemon
+import com.yudha.pokemoapp.core.domain.model.resource.Resource
 import com.yudha.pokemoapp.core.domain.usecase.GetFavoritePokemonUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -33,12 +34,13 @@ class FavoriteViewModelTest {
     fun `when favorites are updated, favoritePokemon should be updated`() = runTest {
         // Given
         val favorites = listOf(Pokemon("Pikachu", "url", "image"))
-        `when`(getFavoritePokemonUseCase()).thenReturn(flowOf(favorites))
+        `when`(getFavoritePokemonUseCase()).thenReturn(flowOf(Resource.Success(favorites)))
 
         // When
         viewModel = FavoriteViewModel(getFavoritePokemonUseCase)
 
         // Then
         assertEquals(favorites, viewModel.favoritePokemon.value)
+        assertEquals(false, viewModel.isLoading.value)
     }
 }

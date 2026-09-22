@@ -3,6 +3,7 @@ package com.yudha.pokemoapp.favorite
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -27,6 +28,7 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>(ActivityFavoriteB
     }
 
     override fun setupView() {
+        binding.toolbar.setNavigationOnClickListener { finish() }
         pokemonAdapter = PokemonAdapter { pokemon ->
             val intent = Intent(this, DetailActivity::class.java).apply {
                 putExtra(DetailActivity.EXTRA_NAME, pokemon.name)
@@ -42,9 +44,23 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>(ActivityFavoriteB
     override fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.favoritePokemon.collect { list ->
-                    pokemonAdapter.submitList(list)
-                    binding.tvNoFavorite.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+                launch {
+                    viewModel.favoritePokemon.collect { list ->
+                        pokemonAdapter.submitList(list)
+                        binding.tvNoFavorite.visibility = if (list.isEmpty() && !viewModel.isLoading.value) View.VISIBLE else View.GONE
+                    }
+                }
+                launch {
+                    viewModel.isLoading.collect { isLoading ->
+                        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                    }
+                }
+                launch {
+                    viewModel.error.collect { error ->
+                        error?.let {
+                            Toast.makeText(this@FavoriteActivity, it, Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }

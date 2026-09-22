@@ -62,7 +62,12 @@ class PokemonListActivity : BaseActivity<ActivityPokemonListBinding>(ActivityPok
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.pokemonList.collect { list ->
-                        pokemonAdapter.submitList(list)
+                        val isAtTop = (binding.rvPokemon.layoutManager as? GridLayoutManager)?.findFirstCompletelyVisibleItemPosition() == 0
+                        pokemonAdapter.submitList(list) {
+                            if (isAtTop || binding.searchView.query.isNotEmpty()) {
+                                binding.rvPokemon.scrollToPosition(0)
+                            }
+                        }
                     }
                 }
                 launch {

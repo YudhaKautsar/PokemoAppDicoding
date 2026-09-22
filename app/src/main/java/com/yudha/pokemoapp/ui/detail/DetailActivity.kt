@@ -22,6 +22,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(ActivityDetailBinding
     private val viewModel: PokemonDetailViewModel by viewModel()
 
     override fun setupView() {
+        binding.toolbar.setNavigationOnClickListener { finish() }
         val name = intent.getStringExtra(EXTRA_NAME)
         if (name != null) {
             viewModel.fetchPokemonDetail(name)

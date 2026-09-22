@@ -9,7 +9,7 @@ interface PokemonRepository {
     fun getPokemonList(limit: Int, offset: Int): Flow<Resource<List<Pokemon>>>
     fun getPokemonDetail(name: String): Flow<Resource<PokemonDetail>>
     
-    fun getFavoritePokemon(): Flow<List<Pokemon>>
+    fun getFavoritePokemon(): Flow<Resource<List<Pokemon>>>
     fun isFavorite(name: String): Flow<Boolean>
     suspend fun setFavorite(pokemon: Pokemon, isFavorite: Boolean)
 }

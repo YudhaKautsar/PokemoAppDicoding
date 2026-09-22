@@ -17,6 +17,7 @@ class SettingPreferences(private val context: Context) : ISettingRepository {
 
     private val themeKey = booleanPreferencesKey("theme_setting")
     private val sortKey = stringPreferencesKey("sort_setting")
+    private val sortOrderKey = booleanPreferencesKey("sort_order_setting")
 
     override fun getThemeSetting(): Flow<Boolean> {
         return context.dataStore.data.map { preferences ->
@@ -39,6 +40,18 @@ class SettingPreferences(private val context: Context) : ISettingRepository {
     override suspend fun saveSortSetting(sortType: String) {
         context.dataStore.edit { preferences ->
             preferences[sortKey] = sortType
+        }
+    }
+
+    override fun getSortOrder(): Flow<Boolean> {
+        return context.dataStore.data.map { preferences ->
+            preferences[sortOrderKey] ?: true
+        }
+    }
+
+    override suspend fun saveSortOrder(isAscending: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[sortOrderKey] = isAscending
         }
     }
 }

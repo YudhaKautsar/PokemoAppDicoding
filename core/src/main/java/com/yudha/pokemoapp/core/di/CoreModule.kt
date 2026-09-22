@@ -10,10 +10,12 @@ import com.yudha.pokemoapp.core.domain.repository.ISettingRepository
 import com.yudha.pokemoapp.core.domain.repository.PokemonRepository
 import com.yudha.pokemoapp.core.domain.usecase.GetFavoritePokemonUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetFavoriteStatusUseCase
+import com.yudha.pokemoapp.core.domain.usecase.GetSortOrderUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetSortSettingUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetThemeSettingUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetPokemonDetailUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetPokemonListUseCase
+import com.yudha.pokemoapp.core.domain.usecase.SaveSortOrderUseCase
 import com.yudha.pokemoapp.core.domain.usecase.SaveSortSettingUseCase
 import com.yudha.pokemoapp.core.domain.usecase.SaveThemeSettingUseCase
 import com.yudha.pokemoapp.core.domain.usecase.ToggleFavoriteUseCase
@@ -71,4 +73,6 @@ val useCaseModule = module {
     single { SaveThemeSettingUseCase(get()) }
     single { GetSortSettingUseCase(get()) }
     single { SaveSortSettingUseCase(get()) }
+    single { GetSortOrderUseCase(get()) }
+    single { SaveSortOrderUseCase(get()) }
 }
