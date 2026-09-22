@@ -1,10 +1,12 @@
 package com.yudha.pokemoapp.core.data.repository
 
 import com.yudha.pokemoapp.core.data.local.dao.PokemonDao
+import com.yudha.pokemoapp.core.data.local.entity.PokemonEntity
 import com.yudha.pokemoapp.core.data.remote.ApiService
 import com.yudha.pokemoapp.core.data.remote.response.PokemonItemResponse
 import com.yudha.pokemoapp.core.data.remote.response.PokemonListResponse
 import com.yudha.pokemoapp.core.domain.model.resource.Resource
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -50,5 +52,23 @@ class PokemonRepositoryImplTest {
         val successData = (results[1] as Resource.Success).data
         assertEquals(1, successData?.size)
         assertEquals("bulbasaur", successData?.get(0)?.name)
+    }
+
+    @Test
+    fun `getPokemonList should return favorites from database when api fails`() = runTest {
+        // Given
+        whenever(apiService.getPokemonList(100, 0)).thenThrow(RuntimeException("Network Error"))
+        val localFavorites = listOf(PokemonEntity("Pikachu", "url", "image"))
+        whenever(pokemonDao.getAllFavorites()).thenReturn(flowOf(localFavorites))
+
+        // When
+        val results = repository.getPokemonList(100, 0).toList()
+
+        // Then
+        assertTrue(results[0] is Resource.Loading)
+        assertTrue(results[1] is Resource.Success)
+        val successData = (results[1] as Resource.Success).data
+        assertEquals(1, successData?.size)
+        assertEquals("Pikachu", successData?.get(0)?.name)
     }
 }

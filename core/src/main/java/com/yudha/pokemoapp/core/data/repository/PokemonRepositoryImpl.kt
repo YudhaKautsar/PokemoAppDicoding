@@ -8,6 +8,7 @@ import com.yudha.pokemoapp.core.domain.model.PokemonDetail
 import com.yudha.pokemoapp.core.domain.model.resource.Resource
 import com.yudha.pokemoapp.core.domain.repository.PokemonRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
@@ -23,7 +24,15 @@ class PokemonRepositoryImpl(
             val list = response.results.map { PokemonMapper.mapItemResponseToDomain(it) }
             emit(Resource.Success(list))
         } catch (e: Exception) {
-            emit(Resource.Error(e.message ?: "Unknown Error"))
+            val localFavorites = pokemonDao.getAllFavorites().map { entities ->
+                entities.map { PokemonMapper.mapEntityToDomain(it) }
+            }.first()
+            
+            if (localFavorites.isNotEmpty()) {
+                emit(Resource.Success(localFavorites))
+            } else {
+                emit(Resource.Error(e.message ?: "Unknown Error"))
+            }
         }
     }
 
