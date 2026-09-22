@@ -9,7 +9,7 @@ kotlin {
 
 android {
     namespace = "com.yudha.pokemoapp.core"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 24
