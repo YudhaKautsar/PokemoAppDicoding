@@ -1,4 +1,4 @@
-package com.yudha.pokemoapp
+package com.yudha.pokemoapp.core
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

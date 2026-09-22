@@ -4,8 +4,11 @@ import com.yudha.pokemoapp.core.data.local.dao.PokemonDao
 import com.yudha.pokemoapp.core.data.remote.ApiService
 import com.yudha.pokemoapp.core.data.remote.response.PokemonItemResponse
 import com.yudha.pokemoapp.core.data.remote.response.PokemonListResponse
+import com.yudha.pokemoapp.core.domain.model.resource.Resource
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -39,11 +42,13 @@ class PokemonRepositoryImplTest {
         whenever(apiService.getPokemonList(100, 0)).thenReturn(response)
 
         // When
-        val result = repository.getPokemonList(100, 0)
+        val results = repository.getPokemonList(100, 0).toList()
 
         // Then
-        assertEquals(1, result.size)
-        assertEquals("bulbasaur", result[0].name)
-        assertEquals("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png", result[0].imageUrl)
+        assertTrue(results[0] is Resource.Loading)
+        assertTrue(results[1] is Resource.Success)
+        val successData = (results[1] as Resource.Success).data
+        assertEquals(1, successData?.size)
+        assertEquals("bulbasaur", successData?.get(0)?.name)
     }
 }

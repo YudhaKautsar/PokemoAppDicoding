@@ -2,8 +2,11 @@ package com.yudha.pokemoapp.ui.list
 
 import com.yudha.pokemoapp.MainDispatcherRule
 import com.yudha.pokemoapp.core.domain.model.Pokemon
+import com.yudha.pokemoapp.core.domain.model.resource.Resource
 import com.yudha.pokemoapp.core.domain.usecase.GetPokemonListUseCase
+import com.yudha.pokemoapp.core.domain.usecase.GetSortSettingUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -22,12 +25,15 @@ class PokemonListViewModelTest {
 
     @Mock
     private lateinit var getPokemonListUseCase: GetPokemonListUseCase
+    @Mock
+    private lateinit var getSortSettingUseCase: GetSortSettingUseCase
 
     private lateinit var viewModel: PokemonListViewModel
 
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
+        `when`(getSortSettingUseCase()).thenReturn(flowOf("name"))
     }
 
     @Test
@@ -37,10 +43,10 @@ class PokemonListViewModelTest {
             Pokemon("Bulbasaur", "url1", "image1"),
             Pokemon("Ivysaur", "url2", "image2")
         )
-        `when`(getPokemonListUseCase(100, 0)).thenReturn(pokemonList)
+        `when`(getPokemonListUseCase(100, 0)).thenReturn(flowOf(Resource.Success(pokemonList)))
 
         // When
-        viewModel = PokemonListViewModel(getPokemonListUseCase)
+        viewModel = PokemonListViewModel(getPokemonListUseCase, getSortSettingUseCase)
         val job = viewModel.pokemonList.launchIn(this)
 
         // Then

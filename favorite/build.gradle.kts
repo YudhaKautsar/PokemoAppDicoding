@@ -1,6 +1,5 @@
 plugins {
     id("com.android.dynamic-feature")
-    alias(libs.plugins.kotlin.android)
 }
 
 android {

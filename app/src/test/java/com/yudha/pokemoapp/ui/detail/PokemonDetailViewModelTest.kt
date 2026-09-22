@@ -2,6 +2,7 @@ package com.yudha.pokemoapp.ui.detail
 
 import com.yudha.pokemoapp.MainDispatcherRule
 import com.yudha.pokemoapp.core.domain.model.PokemonDetail
+import com.yudha.pokemoapp.core.domain.model.resource.Resource
 import com.yudha.pokemoapp.core.domain.usecase.GetFavoriteStatusUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetPokemonDetailUseCase
 import com.yudha.pokemoapp.core.domain.usecase.ToggleFavoriteUseCase
@@ -42,7 +43,7 @@ class PokemonDetailViewModelTest {
         // Given
         val pokemonName = "Bulbasaur"
         val pokemonDetail = PokemonDetail(1, pokemonName, 7, 69, "image", listOf("grass"), "description")
-        `when`(getPokemonDetailUseCase(pokemonName)).thenReturn(pokemonDetail)
+        `when`(getPokemonDetailUseCase(pokemonName)).thenReturn(flowOf(Resource.Success(pokemonDetail)))
         `when`(getFavoriteStatusUseCase(pokemonName)).thenReturn(flowOf(true))
 
         // When
