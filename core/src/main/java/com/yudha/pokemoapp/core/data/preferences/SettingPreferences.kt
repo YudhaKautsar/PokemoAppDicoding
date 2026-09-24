@@ -8,16 +8,17 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.yudha.pokemoapp.core.domain.repository.ISettingRepository
+import com.yudha.pokemoapp.core.utils.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = Constants.PREFS_SETTINGS_NAME)
 
 class SettingPreferences(private val context: Context) : ISettingRepository {
 
-    private val themeKey = booleanPreferencesKey("theme_setting")
-    private val sortKey = stringPreferencesKey("sort_setting")
-    private val sortOrderKey = booleanPreferencesKey("sort_order_setting")
+    private val themeKey = booleanPreferencesKey(Constants.PREF_KEY_THEME)
+    private val sortKey = stringPreferencesKey(Constants.PREF_KEY_SORT)
+    private val sortOrderKey = booleanPreferencesKey(Constants.PREF_KEY_SORT_ORDER)
 
     override fun getThemeSetting(): Flow<Boolean> {
         return context.dataStore.data.map { preferences ->
@@ -33,7 +34,7 @@ class SettingPreferences(private val context: Context) : ISettingRepository {
 
     override fun getSortSetting(): Flow<String> {
         return context.dataStore.data.map { preferences ->
-            preferences[sortKey] ?: "name"
+            preferences[sortKey] ?: Constants.SORT_BY_NAME
         }
     }
 

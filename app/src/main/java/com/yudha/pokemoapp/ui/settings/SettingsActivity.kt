@@ -5,6 +5,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.yudha.pokemoapp.R
+import com.yudha.pokemoapp.core.utils.Constants
 import com.yudha.pokemoapp.databinding.ActivitySettingsBinding
 import com.yudha.pokemoapp.core.base.BaseActivity
 import kotlinx.coroutines.launch
@@ -38,13 +39,13 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>(ActivitySettingsB
                 launch {
                     viewModel.sortSetting.collect { sortType ->
                         binding.rgSort.setOnCheckedChangeListener(null)
-                        if (sortType == "name") {
+                        if (sortType == Constants.SORT_BY_NAME) {
                             binding.rbName.isChecked = true
                         } else {
                             binding.rbId.isChecked = true
                         }
                         binding.rgSort.setOnCheckedChangeListener { _, checkedId ->
-                            val newSortType = if (checkedId == R.id.rbName) "name" else "id"
+                            val newSortType = if (checkedId == R.id.rbName) Constants.SORT_BY_NAME else Constants.SORT_BY_ID
                             viewModel.saveSortSetting(newSortType)
                         }
                     }

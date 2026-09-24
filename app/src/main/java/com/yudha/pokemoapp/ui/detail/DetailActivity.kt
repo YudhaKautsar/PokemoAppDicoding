@@ -5,7 +5,8 @@ import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.bumptech.glide.Glide
+import com.yudha.pokemoapp.core.utils.Constants
+import com.yudha.pokemoapp.core.utils.loadImage
 import com.yudha.pokemoapp.R
 import com.yudha.pokemoapp.databinding.ActivityDetailBinding
 import com.yudha.pokemoapp.core.domain.model.Pokemon
@@ -14,10 +15,6 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailActivity : BaseActivity<ActivityDetailBinding>(ActivityDetailBinding::inflate) {
-
-    companion object {
-        const val EXTRA_NAME = "extra_name"
-    }
 
     private val viewModel: PokemonDetailViewModel by viewModel()
 
@@ -32,52 +29,61 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(ActivityDetailBinding
     override fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.pokemonDetail.collect { detail ->
-                        detail?.let {
-                            binding.tvNameDetail.text = it.name
-                            binding.tvHeight.text = getString(R.string.height_format, it.height)
-                            binding.tvWeight.text = getString(R.string.weight_format, it.weight)
-                            binding.tvTypes.text = getString(R.string.types_format, it.types.joinToString(", "))
-                            binding.tvDescription.text = it.description
-                            Glide.with(this@DetailActivity)
-                                .load(it.imageUrl)
-                                .into(binding.ivPokemonDetail)
+                binding.apply {
+                    launch {
+                        viewModel.pokemonDetail.collect { detail ->
+                            detail?.let {
+                                tvNameDetail.text = it.name
+                                tvHeight.text = getString(R.string.height_format, it.height)
+                                tvWeight.text = getString(R.string.weight_format, it.weight)
+                                tvTypes.text =
+                                    getString(R.string.types_format, it.types.joinToString(", "))
+                                tvDescription.text = it.description
+                                ivPokemonDetail.loadImage(it.imageUrl)
 
-                            binding.btnFavorite.setOnClickListener { _ ->
-                                viewModel.toggleFavorite(
-                                    Pokemon(
-                                        name = it.name,
-                                        url = "https://pokeapi.co/api/v2/pokemon/${it.id}/",
-                                        imageUrl = it.imageUrl ?: ""
+
+                                btnFavorite.setOnClickListener { _ ->
+                                    viewModel.toggleFavorite(
+                                        Pokemon(
+                                            name = it.name,
+                                            url = "${Constants.POKE_API_POKEMON_URL}${it.id}/",
+                                            imageUrl = it.imageUrl.orEmpty()
+                                        )
                                     )
-                                )
+                                }
+                            }
+
+                        }
+                    }
+                    launch {
+                        viewModel.isFavorite.collect { isFavorite ->
+                            btnFavorite.text = if (isFavorite) {
+                                getString(R.string.remove_from_favorite)
+                            } else {
+                                getString(R.string.add_to_favorite)
                             }
                         }
                     }
-                }
-                launch {
-                    viewModel.isFavorite.collect { isFavorite ->
-                        binding.btnFavorite.text = if (isFavorite) {
-                            getString(R.string.remove_from_favorite)
-                        } else {
-                            getString(R.string.add_to_favorite)
+                    launch {
+                        viewModel.isLoading.collect { isLoading ->
+                            progressBarDetail.visibility =
+                                if (isLoading) View.VISIBLE else View.GONE
                         }
                     }
-                }
-                launch {
-                    viewModel.isLoading.collect { isLoading ->
-                        binding.progressBarDetail.visibility = if (isLoading) View.VISIBLE else View.GONE
-                    }
-                }
-                launch {
-                    viewModel.error.collect { error ->
-                        error?.let {
-                            Toast.makeText(this@DetailActivity, it, Toast.LENGTH_SHORT).show()
+                    launch {
+                        viewModel.error.collect { error ->
+                            error?.let {
+                                Toast.makeText(this@DetailActivity, it, Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+    companion object {
+        const val EXTRA_NAME = Constants.EXTRA_NAME
+    }
+
 }

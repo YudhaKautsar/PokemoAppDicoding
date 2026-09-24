@@ -19,6 +19,7 @@ import com.yudha.pokemoapp.core.domain.usecase.SaveSortOrderUseCase
 import com.yudha.pokemoapp.core.domain.usecase.SaveSortSettingUseCase
 import com.yudha.pokemoapp.core.domain.usecase.SaveThemeSettingUseCase
 import com.yudha.pokemoapp.core.domain.usecase.ToggleFavoriteUseCase
+import com.yudha.pokemoapp.core.utils.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
@@ -52,7 +53,7 @@ val databaseModule = module {
         Room.databaseBuilder(
             androidApplication(),
             AppDatabase::class.java,
-            "pokemon_db"
+            Constants.DATABASE_NAME
         ).build()
     }
     single { get<AppDatabase>().pokemonDao() }

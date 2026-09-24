@@ -7,6 +7,7 @@ import com.yudha.pokemoapp.core.domain.model.resource.Resource
 import com.yudha.pokemoapp.core.domain.usecase.GetPokemonListUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetSortOrderUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetSortSettingUseCase
+import com.yudha.pokemoapp.core.utils.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -38,8 +39,8 @@ class PokemonListViewModel(
         }
         
         val sortedList = when (sort) {
-            "name" -> filteredList.sortedBy { it.name }
-            "id" -> filteredList.sortedBy { it.id.toIntOrNull() ?: 0 }
+            Constants.SORT_BY_NAME -> filteredList.sortedBy { it.name }
+            Constants.SORT_BY_ID -> filteredList.sortedBy { it.id.toIntOrNull() ?: 0 }
             else -> filteredList
         }
 

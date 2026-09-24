@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.yudha.pokemoapp.core.utils.loadImage
 import com.yudha.pokemoapp.core.databinding.ItemPokemonBinding
 import com.yudha.pokemoapp.core.domain.model.Pokemon
 
@@ -24,12 +24,12 @@ class PokemonAdapter(
 
     inner class ViewHolder(private val binding: ItemPokemonBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(pokemon: Pokemon) {
-            binding.tvName.text = pokemon.name
-            Glide.with(binding.ivPokemon)
-                .load(pokemon.imageUrl)
-                .into(binding.ivPokemon)
-            
-            binding.root.setOnClickListener { onClick(pokemon) }
+            binding.apply {
+                tvName.text = pokemon.name
+                ivPokemon.loadImage(pokemon.imageUrl)
+
+                root.setOnClickListener { onClick(pokemon) }
+            }
         }
     }
 

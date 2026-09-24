@@ -20,4 +20,5 @@
     <string name="order_ascending">Ascending</string>
     <string name="order_descending">Descending</string>
     <string name="detail_title">Pokemon Detail</string>
+    <string name="favorite_not_available">Favorite feature not available</string>
 </resources>

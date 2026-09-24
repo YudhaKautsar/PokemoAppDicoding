@@ -6,6 +6,7 @@ import com.yudha.pokemoapp.core.data.remote.response.PokemonItemResponse
 import com.yudha.pokemoapp.core.data.remote.response.PokemonSpeciesResponse
 import com.yudha.pokemoapp.core.domain.model.Pokemon
 import com.yudha.pokemoapp.core.domain.model.PokemonDetail
+import com.yudha.pokemoapp.core.utils.Constants
 
 object PokemonMapper {
 
@@ -14,7 +15,7 @@ object PokemonMapper {
         return Pokemon(
             name = response.name,
             url = response.url,
-            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
+            imageUrl = Constants.POKEMON_IMAGE_URL_FORMAT.format(id)
         )
     }
 
@@ -23,10 +24,10 @@ object PokemonMapper {
         species: PokemonSpeciesResponse?
     ): PokemonDetail {
         val description = species?.flavorTextEntries
-            ?.find { it.language.name == "en" }
+            ?.find { it.language.name == Constants.LANGUAGE_EN }
             ?.flavorText
             ?.replace("\n", " ")
-            ?.replace("\u000c", " ") ?: "No description available"
+            ?.replace("\u000c", " ") ?: Constants.NO_DESCRIPTION_AVAILABLE
 
         return PokemonDetail(
             id = detail.id,

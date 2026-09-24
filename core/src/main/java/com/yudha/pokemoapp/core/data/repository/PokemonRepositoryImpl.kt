@@ -7,6 +7,7 @@ import com.yudha.pokemoapp.core.domain.model.Pokemon
 import com.yudha.pokemoapp.core.domain.model.PokemonDetail
 import com.yudha.pokemoapp.core.domain.model.resource.Resource
 import com.yudha.pokemoapp.core.domain.repository.PokemonRepository
+import com.yudha.pokemoapp.core.utils.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -31,7 +32,7 @@ class PokemonRepositoryImpl(
             if (localFavorites.isNotEmpty()) {
                 emit(Resource.Success(localFavorites))
             } else {
-                emit(Resource.Error(e.message ?: "Unknown Error"))
+                emit(Resource.Error(e.message ?: Constants.ERROR_UNKNOWN))
             }
         }
     }

@@ -8,6 +8,7 @@ import com.yudha.pokemoapp.core.domain.usecase.GetThemeSettingUseCase
 import com.yudha.pokemoapp.core.domain.usecase.SaveSortOrderUseCase
 import com.yudha.pokemoapp.core.domain.usecase.SaveSortSettingUseCase
 import com.yudha.pokemoapp.core.domain.usecase.SaveThemeSettingUseCase
+import com.yudha.pokemoapp.core.utils.Constants
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ class SettingsViewModel(
 ) : ViewModel() {
 
     val themeSetting = getThemeSettingUseCase().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
-    val sortSetting = getSortSettingUseCase().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "name")
+    val sortSetting = getSortSettingUseCase().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), Constants.SORT_BY_NAME)
     val sortOrder = getSortOrderUseCase().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
 
     fun saveThemeSetting(isDarkModeActive: Boolean) {

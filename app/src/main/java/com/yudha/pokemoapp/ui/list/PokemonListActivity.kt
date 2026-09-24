@@ -14,6 +14,9 @@ import com.yudha.pokemoapp.core.ui.adapter.PokemonAdapter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
+import com.yudha.pokemoapp.R
+import com.yudha.pokemoapp.core.utils.Constants
 import com.yudha.pokemoapp.ui.settings.SettingsActivity
 
 class PokemonListActivity : BaseActivity<ActivityPokemonListBinding>(ActivityPokemonListBinding::inflate) {
@@ -34,10 +37,10 @@ class PokemonListActivity : BaseActivity<ActivityPokemonListBinding>(ActivityPok
         }
         binding.fabFavorite.setOnClickListener {
             try {
-                val intent = Intent(this, Class.forName("com.yudha.pokemoapp.favorite.FavoriteActivity"))
+                val intent = Intent(this, Class.forName(Constants.FAVORITE_ACTIVITY_CLASS_NAME))
                 startActivity(intent)
             } catch (_: ClassNotFoundException) {
-                Toast.makeText(this, "Favorite feature not available", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.favorite_not_available), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -72,7 +75,7 @@ class PokemonListActivity : BaseActivity<ActivityPokemonListBinding>(ActivityPok
                 }
                 launch {
                     viewModel.isLoading.collect { isLoading ->
-                        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                        binding.progressBar.isVisible = isLoading
                     }
                 }
                 launch {

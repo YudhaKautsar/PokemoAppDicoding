@@ -6,6 +6,7 @@ import com.yudha.pokemoapp.core.domain.model.resource.Resource
 import com.yudha.pokemoapp.core.domain.usecase.GetPokemonListUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetSortOrderUseCase
 import com.yudha.pokemoapp.core.domain.usecase.GetSortSettingUseCase
+import com.yudha.pokemoapp.core.utils.Constants
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -36,7 +37,7 @@ class PokemonListViewModelTest {
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        `when`(getSortSettingUseCase()).thenReturn(flowOf("name"))
+        `when`(getSortSettingUseCase()).thenReturn(flowOf(Constants.SORT_BY_NAME))
         `when`(getSortOrderUseCase()).thenReturn(flowOf(true))
     }
 
