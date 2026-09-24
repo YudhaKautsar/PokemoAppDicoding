@@ -1,7 +1,6 @@
 package com.yudha.pokemoapp.ui.list
 
 import android.content.Intent
-import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope

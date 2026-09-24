@@ -8,7 +8,6 @@
     <string name="height_format">Height: %1$d</string>
     <string name="weight_format">Weight: %1$d</string>
     <string name="types_format">Types: %1$s</string>
-    <string name="error_unknown">Unknown Error</string>
     <string name="title_favorite">Favorite Pokemon</string>
     <string name="settings_title">Settings</string>
     <string name="theme_settings_title">Theme Settings</string>

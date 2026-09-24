@@ -6,5 +6,5 @@ data class Pokemon(
     val imageUrl: String
 ) {
     val id: String
-        get() = url.split("/").filter { it.isNotEmpty() }.last()
+        get() = url.split("/").last { it.isNotEmpty() }
 }
