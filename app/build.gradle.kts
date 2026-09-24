@@ -24,8 +24,12 @@ android {
     dynamicFeatures += listOf(":favorite")
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -51,6 +55,8 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.dynamic.features.fragment)
+
+    debugImplementation(libs.leakcanary.android)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)

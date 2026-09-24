@@ -7,7 +7,7 @@ executors:
     resource_class: medium
 
 jobs:
-  test:
+  test_and_coverage:
     executor: android-executor
     steps:
       - checkout
@@ -19,7 +19,7 @@ jobs:
           name: Grant execute permissions for gradlew
           command: chmod +x ./gradlew
       - run:
-          name: Run Unit Tests for All Modules
+          name: Run Unit Tests and Generate Code Coverage
           command: ./gradlew testDebugUnitTest --continue
       - save_cache:
           key: gradle-v1-{{ checksum "gradle/libs.versions.toml" }}
@@ -33,16 +33,25 @@ jobs:
       - store_test_results:
           path: favorite/build/test-results
       - store_artifacts:
+          path: app/build/reports/coverage/test/debug/
+          destination: reports/code-coverage/app
+      - store_artifacts:
+          path: core/build/reports/coverage/test/debug/
+          destination: reports/code-coverage/core
+      - store_artifacts:
+          path: favorite/build/reports/coverage/test/debug/
+          destination: reports/code-coverage/favorite
+      - store_artifacts:
           path: app/build/reports/tests/testDebugUnitTest
-          destination: reports/app-tests
+          destination: reports/unit-tests/app
       - store_artifacts:
           path: core/build/reports/tests/testDebugUnitTest
-          destination: reports/core-tests
+          destination: reports/unit-tests/core
       - store_artifacts:
           path: favorite/build/reports/tests/testDebugUnitTest
-          destination: reports/favorite-tests
+          destination: reports/unit-tests/favorite
 
-  build-apk:
+  code_style_and_lint:
     executor: android-executor
     steps:
       - checkout
@@ -54,8 +63,50 @@ jobs:
           name: Grant execute permissions for gradlew
           command: chmod +x ./gradlew
       - run:
-          name: Build Debug APK
-          command: ./gradlew assembleDebug
+          name: Run Static Analysis & Code Style Check
+          command: ./gradlew lintDebug --continue
+      - store_artifacts:
+          path: app/build/reports/lint-results-debug.html
+          destination: reports/lint/app-lint-debug.html
+      - store_artifacts:
+          path: core/build/reports/lint-results-debug.html
+          destination: reports/lint/core-lint-debug.html
+      - store_artifacts:
+          path: favorite/build/reports/lint-results-debug.html
+          destination: reports/lint/favorite-lint-debug.html
+
+  vulnerability_scan:
+    executor: android-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gradle-v1-{{ checksum "gradle/libs.versions.toml" }}
+            - gradle-v1-
+      - run:
+          name: Grant execute permissions for gradlew
+          command: chmod +x ./gradlew
+      - run:
+          name: Run Security & Vulnerability Analysis
+          command: ./gradlew lintDebug -Dlint.baselines.continue=true
+      - store_artifacts:
+          path: app/build/reports/lint-results-debug.xml
+          destination: reports/vulnerability-scan/app-security-lint.xml
+
+  build_apk:
+    executor: android-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gradle-v1-{{ checksum "gradle/libs.versions.toml" }}
+            - gradle-v1-
+      - run:
+          name: Grant execute permissions for gradlew
+          command: chmod +x ./gradlew
+      - run:
+          name: Build Debug and Release APK
+          command: ./gradlew assembleDebug assembleRelease
       - save_cache:
           key: gradle-v1-{{ checksum "gradle/libs.versions.toml" }}
           paths:
@@ -64,11 +115,18 @@ jobs:
       - store_artifacts:
           path: app/build/outputs/apk/debug/
           destination: apk-debug
+      - store_artifacts:
+          path: app/build/outputs/apk/release/
+          destination: apk-release
 
 workflows:
-  build_and_test:
+  ci_cd_pipeline:
     jobs:
-      - test
-      - build-apk:
+      - test_and_coverage
+      - code_style_and_lint
+      - vulnerability_scan
+      - build_apk:
           requires:
-            - test
+            - test_and_coverage
+            - code_style_and_lint
+            - vulnerability_scan

@@ -20,6 +20,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -52,10 +55,12 @@ dependencies {
     // Coroutines
     api(libs.coroutines.android)
 
-    // Room
+    // Room & Database Encryption
     api(libs.room.runtime)
     api(libs.room.ktx)
     ksp(libs.room.compiler)
+    api(libs.sqlcipher.android)
+    api(libs.androidx.sqlite.ktx)
 
     // Glide
     api(libs.glide)

@@ -20,6 +20,8 @@ import com.yudha.pokemoapp.core.domain.usecase.SaveSortSettingUseCase
 import com.yudha.pokemoapp.core.domain.usecase.SaveThemeSettingUseCase
 import com.yudha.pokemoapp.core.domain.usecase.ToggleFavoriteUseCase
 import com.yudha.pokemoapp.core.utils.Constants
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
+import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
@@ -34,8 +36,16 @@ val networkModule = module {
         }
     }
     single {
+        val hostname = Constants.API_HOSTNAME
+        val certificatePinner = CertificatePinner.Builder()
+            .add(hostname, Constants.CERT_PIN_1)
+            .add(hostname, Constants.CERT_PIN_2)
+            .add(hostname, Constants.CERT_PIN_3)
+            .build()
+
         OkHttpClient.Builder()
             .addInterceptor(get<HttpLoggingInterceptor>())
+            .certificatePinner(certificatePinner)
             .build()
     }
     single {
@@ -50,11 +60,16 @@ val networkModule = module {
 
 val databaseModule = module {
     single {
+        val passphrase = Constants.DB_PASSPHRASE.toByteArray()
+        val factory = SupportOpenHelperFactory(passphrase)
+
         Room.databaseBuilder(
             androidApplication(),
             AppDatabase::class.java,
             Constants.DATABASE_NAME
-        ).build()
+        )
+            .openHelperFactory(factory)
+            .build()
     }
     single { get<AppDatabase>().pokemonDao() }
     single<ISettingRepository> { SettingPreferences(androidApplication()) }

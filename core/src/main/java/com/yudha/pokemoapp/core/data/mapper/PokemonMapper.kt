@@ -11,7 +11,7 @@ import com.yudha.pokemoapp.core.utils.Constants
 object PokemonMapper {
 
     fun mapItemResponseToDomain(response: PokemonItemResponse): Pokemon {
-        val id = response.url.split("/").asSequence().last { it.isNotEmpty() }
+        val id = response.url.split("/").last { it.isNotEmpty() }
         return Pokemon(
             name = response.name,
             url = response.url,
