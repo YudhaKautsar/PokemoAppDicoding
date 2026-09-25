@@ -16,9 +16,12 @@
 # Room Keep Rules
 -keep class * extends androidx.room.RoomDatabase
 
-# SQLCipher Keep Rules
+# SQLCipher Keep Rules & Native JNI Methods
 -keep class net.zetetic.database.sqlcipher.** { *; }
 -keep class net.zetetic.database.** { *; }
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
 
 # Glide Keep Rules
 -keep public class * implements com.bumptech.glide.module.GlideModule

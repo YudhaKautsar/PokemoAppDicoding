@@ -60,6 +60,12 @@ val networkModule = module {
 
 val databaseModule = module {
     single {
+        try {
+            System.loadLibrary("sqlcipher")
+        } catch (e: UnsatisfiedLinkError) {
+            e.printStackTrace()
+        }
+
         val passphrase = Constants.DB_PASSPHRASE.toByteArray()
         val factory = SupportOpenHelperFactory(passphrase)
 

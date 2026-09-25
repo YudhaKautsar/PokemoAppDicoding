@@ -12,3 +12,6 @@
 
 -keep class net.zetetic.database.sqlcipher.** { *; }
 -keep class net.zetetic.database.** { *; }
+-keepclasseswithmembernames class * {
+    native <methods>;
+}

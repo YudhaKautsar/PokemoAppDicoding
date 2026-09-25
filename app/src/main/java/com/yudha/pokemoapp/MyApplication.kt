@@ -19,6 +19,12 @@ import org.koin.core.context.startKoin
 class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        try {
+            System.loadLibrary("sqlcipher")
+        } catch (e: UnsatisfiedLinkError) {
+            e.printStackTrace()
+        }
+
         startKoin {
             androidLogger()
             androidContext(this@MyApplication)

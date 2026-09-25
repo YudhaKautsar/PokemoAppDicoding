@@ -12,6 +12,9 @@
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
-# SQLCipher Keep Rules
+# SQLCipher Keep Rules & Native JNI Methods
 -keep class net.zetetic.database.sqlcipher.** { *; }
 -keep class net.zetetic.database.** { *; }
+-keepclasseswithmembernames class * {
+    native <methods>;
+}

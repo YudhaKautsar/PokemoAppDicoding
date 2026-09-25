@@ -4,7 +4,10 @@ executors:
   android-executor:
     docker:
       - image: cimg/android:2024.04-node
-    resource_class: medium
+    resource_class: large
+    environment:
+      _JAVA_OPTIONS: "-Xmx3072m"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dorg.gradle.jvmargs='-Xmx3072m -XX:MaxMetaspaceSize=512m'"
 
 jobs:
   test_and_coverage:
@@ -20,7 +23,7 @@ jobs:
           command: chmod +x ./gradlew
       - run:
           name: Run Unit Tests and Generate Code Coverage
-          command: ./gradlew testDebugUnitTest --continue
+          command: ./gradlew testDebugUnitTest --no-daemon --max-workers=2 --continue
       - save_cache:
           key: gradle-v1-{{ checksum "gradle/libs.versions.toml" }}
           paths:
@@ -64,7 +67,7 @@ jobs:
           command: chmod +x ./gradlew
       - run:
           name: Run Static Analysis & Code Style Check
-          command: ./gradlew lintDebug --continue
+          command: ./gradlew lintDebug --no-daemon --max-workers=2 --continue
       - store_artifacts:
           path: app/build/reports/lint-results-debug.html
           destination: reports/lint/app-lint-debug.html
@@ -88,7 +91,7 @@ jobs:
           command: chmod +x ./gradlew
       - run:
           name: Run Security & Vulnerability Analysis
-          command: ./gradlew lintDebug -Dlint.baselines.continue=true
+          command: ./gradlew lintDebug --no-daemon --max-workers=2 -Dlint.baselines.continue=true
       - store_artifacts:
           path: app/build/reports/lint-results-debug.xml
           destination: reports/vulnerability-scan/app-security-lint.xml
@@ -106,7 +109,7 @@ jobs:
           command: chmod +x ./gradlew
       - run:
           name: Build Debug and Release APK
-          command: ./gradlew assembleDebug assembleRelease
+          command: ./gradlew assembleDebug assembleRelease --no-daemon --max-workers=2
       - save_cache:
           key: gradle-v1-{{ checksum "gradle/libs.versions.toml" }}
           paths:
