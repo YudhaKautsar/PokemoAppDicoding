@@ -1,9 +1,12 @@
-# Keep Data Models & Serialized Classes (Gson / Room)
--keep class com.yudha.pokemoapp.core.data.remote.response.** { *; }
--keep class com.yudha.pokemoapp.core.data.local.entity.** { *; }
--keep class com.yudha.pokemoapp.core.domain.model.** { *; }
+# Keep Core Library Public API & Base Classes
+-keep class com.yudha.pokemoapp.core.base.** { *; }
+-keep class com.yudha.pokemoapp.core.domain.** { *; }
+-keep class com.yudha.pokemoapp.core.data.** { *; }
+-keep class com.yudha.pokemoapp.core.ui.** { *; }
+-keep class com.yudha.pokemoapp.core.di.** { *; }
+-keep class com.yudha.pokemoapp.core.utils.** { *; }
 
-# Gson Keep Rules
+# Keep Serialized Model Classes
 -keepattributes *Annotation*, Signature
 -keepclassmembers class * {
     @com.google.gson.annotations.SerializedName <fields>;

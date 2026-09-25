@@ -20,7 +20,7 @@ android {
             enableUnitTestCoverage = true
         }
         release {
-            isMinifyEnabled = false
+            proguardFiles("proguard-rules.pro")
         }
     }
 
