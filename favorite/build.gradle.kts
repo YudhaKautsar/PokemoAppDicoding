@@ -18,6 +18,7 @@ android {
     buildTypes {
         debug {
             enableUnitTestCoverage = true
+            proguardFiles("proguard-rules.pro")
         }
         release {
             proguardFiles("proguard-rules.pro")

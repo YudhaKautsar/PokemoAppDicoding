@@ -21,7 +21,9 @@ android {
 
     buildTypes {
         debug {
+            isMinifyEnabled = true
             enableUnitTestCoverage = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         release {
             isMinifyEnabled = true
